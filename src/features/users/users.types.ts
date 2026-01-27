@@ -8,6 +8,10 @@ export type User = {
   address?: {
     city?: string
   }
+  company?: {
+    name?: string
+  }
+  [key: string]: any
 }
 
 export type UsersResponse = {

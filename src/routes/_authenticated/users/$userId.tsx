@@ -1,5 +1,4 @@
-// routes/_authenticated/users/$userId.tsx
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import {
   useGetUserByIdQuery,
@@ -56,7 +55,7 @@ function UserPage() {
 
         <button
           disabled={saving}
-          onClick={() => updateUser({ id, ...form })}
+          onClick={() => updateUser({ id, data: form })}
           className="w-full mt-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-50"
         >
           {saving ? 'Saving…' : 'Save changes'}
