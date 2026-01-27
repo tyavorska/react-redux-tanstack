@@ -1,37 +1,35 @@
-import React, { useEffect, useState, useTransition } from 'react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { signIn } from '@/store/auth.thunks'
+import React, { useState } from 'react'
+import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
+import { useAppDispatch } from '../../store/hooks'
+import { setAuth } from '@/features/auth/auth.slice'
+import { useLoginMutation } from '@/features/auth/auth.api'
 
 export const Route = createFileRoute('/signin/')({
   component: SignIn,
 })
 
 export default function SignIn() {
+  const search = useSearch<{ redirect?: string }>({ from: '/signin/' })
+  const navigate = useNavigate()
+  const [login, { isLoading, error }] = useLoginMutation()
+  const dispatch = useAppDispatch()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [isPending, startTransition] = useTransition()
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const authStatus = useAppSelector((s) => s.auth.status)
-  const authError = useAppSelector((s) => s.auth.error)
-  const user = useAppSelector((s) => s.auth.user)
 
-  useEffect(() => {
-    console.log(user, authStatus)
-
-    if (authStatus === 'succeeded' && user) {
-      navigate({ to: '/' })
-    }
-  }, [authStatus, user, navigate])
-
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!username || !password) return
 
-    startTransition(() => {
-      dispatch(signIn({ username, password }))
-    })
+    try {
+      const result = await login({ username, password }).unwrap()
+      dispatch(setAuth({ accessToken: result.accessToken, user: result.user }))
+
+      const redirectTo = search.redirect || '/'
+      navigate({ to: redirectTo, replace: true })
+    } catch (err) {
+      console.error('Login failed', err)
+    }
   }
 
   return (
@@ -66,15 +64,15 @@ export default function SignIn() {
           />
         </label>
 
-        {authError ? <div className="text-red-400">{authError}</div> : null}
+        {error ? <div className="text-red-400">Login failed</div> : null}
 
         <div>
           <button
             type="submit"
-            disabled={isPending || authStatus === 'loading'}
+            disabled={isLoading}
             className="bg-green-600 px-4 py-2 rounded disabled:opacity-60"
           >
-            {authStatus === 'loading' ? 'Signing in…' : 'Sign In'}
+            {isLoading ? 'Signing in…' : 'Sign In'}
           </button>
         </div>
       </form>

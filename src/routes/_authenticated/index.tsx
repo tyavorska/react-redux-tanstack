@@ -1,9 +1,8 @@
 import React from 'react'
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
-import { getPosts, getUsers } from '../api/api'
-// import type { Post, User } from '../api/api'
+import { getPosts, getUsers } from '../../api/api'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authenticated/')({
   ssr: false,
   loader: async () => {
     const [postsRes, usersRes] = await Promise.all([getPosts(), getUsers()])
@@ -15,13 +14,10 @@ export const Route = createFileRoute('/')({
 export default function Home() {
   const { posts, users } = useLoaderData({ from: Route.id })
 
-  const loading = !posts || !users
-  const totalPosts = posts?.length ?? 0
-  const totalUsers = users?.length ?? 0
+  const totalPosts = posts.length
+  const totalUsers = users.length
 
-  // build posts-per-user distribution and take top 6 for chart
   const postsPerUser = React.useMemo(() => {
-    if (!posts) return []
     const map = new Map<number | string, number>()
     for (const p of posts) {
       const uid = p.userId ?? 'unknown'
@@ -45,17 +41,11 @@ export default function Home() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <StatCard title="Total posts" value={loading ? '…' : totalPosts} />
-          <StatCard title="Total users" value={loading ? '…' : totalUsers} />
+          <StatCard title="Total posts" value={totalPosts} />
+          <StatCard title="Total users" value={totalUsers} />
           <StatCard
             title="Average posts / user"
-            value={
-              loading
-                ? '…'
-                : totalUsers
-                  ? (totalPosts / totalUsers).toFixed(2)
-                  : '0'
-            }
+            value={totalUsers ? (totalPosts / totalUsers).toFixed(2) : '0'}
           />
         </div>
       </header>
@@ -63,9 +53,7 @@ export default function Home() {
       <main className="max-w-4xl mx-auto">
         <section className="bg-slate-800 rounded-md p-4 mb-6">
           <h2 className="text-2xl font-semibold mb-3">Posts by user (top)</h2>
-          {loading ? (
-            <div className="text-slate-300">Loading chart…</div>
-          ) : postsPerUser.length === 0 ? (
+          {postsPerUser.length === 0 ? (
             <div className="text-slate-300">No posts available</div>
           ) : (
             <BarChart data={postsPerUser} />
@@ -84,7 +72,6 @@ export default function Home() {
   )
 }
 
-/* small reusable stat card */
 function StatCard({ title, value }: { title: string; value: string | number }) {
   return (
     <div className="bg-slate-800 rounded-md p-4 flex flex-col">
@@ -94,7 +81,6 @@ function StatCard({ title, value }: { title: string; value: string | number }) {
   )
 }
 
-/* simple SVG bar chart */
 function BarChart({
   data,
 }: {

@@ -9,21 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as SigninIndexRouteImport } from './routes/signin/index'
-import { Route as PostsIndexRouteImport } from './routes/posts/index'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authenticated/users/index'
+import { Route as AuthenticatedPostsIndexRouteImport } from './routes/_authenticated/posts/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedUsersUserIdRouteImport } from './routes/_authenticated/users/$userId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UsersIndexRoute = UsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SigninIndexRoute = SigninIndexRouteImport.update({
@@ -31,91 +26,93 @@ const SigninIndexRoute = SigninIndexRouteImport.update({
   path: '/signin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PostsIndexRoute = PostsIndexRouteImport.update({
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedUsersIndexRoute = AuthenticatedUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPostsIndexRoute = AuthenticatedPostsIndexRouteImport.update({
   id: '/posts/',
   path: '/posts/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const UsersUserIdRoute = UsersUserIdRouteImport.update({
-  id: '/users/$userId',
-  path: '/users/$userId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedUsersUserIdRoute =
+  AuthenticatedUsersUserIdRouteImport.update({
+    id: '/users/$userId',
+    path: '/users/$userId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/admin/': typeof AdminIndexRoute
-  '/posts/': typeof PostsIndexRoute
+  '/': typeof AuthenticatedIndexRoute
   '/signin/': typeof SigninIndexRoute
-  '/users/': typeof UsersIndexRoute
+  '/users/$userId': typeof AuthenticatedUsersUserIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/posts/': typeof AuthenticatedPostsIndexRoute
+  '/users/': typeof AuthenticatedUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/admin': typeof AdminIndexRoute
-  '/posts': typeof PostsIndexRoute
+  '/': typeof AuthenticatedIndexRoute
   '/signin': typeof SigninIndexRoute
-  '/users': typeof UsersIndexRoute
+  '/users/$userId': typeof AuthenticatedUsersUserIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/posts': typeof AuthenticatedPostsIndexRoute
+  '/users': typeof AuthenticatedUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/admin/': typeof AdminIndexRoute
-  '/posts/': typeof PostsIndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/': typeof AuthenticatedIndexRoute
   '/signin/': typeof SigninIndexRoute
-  '/users/': typeof UsersIndexRoute
+  '/_authenticated/users/$userId': typeof AuthenticatedUsersUserIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/posts/': typeof AuthenticatedPostsIndexRoute
+  '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/signin/'
     | '/users/$userId'
     | '/admin/'
     | '/posts/'
-    | '/signin/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/users/$userId' | '/admin' | '/posts' | '/signin' | '/users'
+  to: '/' | '/signin' | '/users/$userId' | '/admin' | '/posts' | '/users'
   id:
     | '__root__'
-    | '/'
-    | '/users/$userId'
-    | '/admin/'
-    | '/posts/'
+    | '/_authenticated'
+    | '/_authenticated/'
     | '/signin/'
-    | '/users/'
+    | '/_authenticated/users/$userId'
+    | '/_authenticated/admin/'
+    | '/_authenticated/posts/'
+    | '/_authenticated/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  UsersUserIdRoute: typeof UsersUserIdRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  PostsIndexRoute: typeof PostsIndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   SigninIndexRoute: typeof SigninIndexRoute
-  UsersIndexRoute: typeof UsersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/users/': {
-      id: '/users/'
-      path: '/users'
-      fullPath: '/users/'
-      preLoaderRoute: typeof UsersIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signin/': {
@@ -125,37 +122,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/posts/': {
-      id: '/posts/'
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/users/': {
+      id: '/_authenticated/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof AuthenticatedUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/posts/': {
+      id: '/_authenticated/posts/'
       path: '/posts'
       fullPath: '/posts/'
-      preLoaderRoute: typeof PostsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedPostsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/admin/': {
-      id: '/admin/'
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
       path: '/admin'
       fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/users/$userId': {
-      id: '/users/$userId'
+    '/_authenticated/users/$userId': {
+      id: '/_authenticated/users/$userId'
       path: '/users/$userId'
       fullPath: '/users/$userId'
-      preLoaderRoute: typeof UsersUserIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedUsersUserIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedUsersUserIdRoute: typeof AuthenticatedUsersUserIdRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedPostsIndexRoute: typeof AuthenticatedPostsIndexRoute
+  AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedUsersUserIdRoute: AuthenticatedUsersUserIdRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedPostsIndexRoute: AuthenticatedPostsIndexRoute,
+  AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  UsersUserIdRoute: UsersUserIdRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  PostsIndexRoute: PostsIndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   SigninIndexRoute: SigninIndexRoute,
-  UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

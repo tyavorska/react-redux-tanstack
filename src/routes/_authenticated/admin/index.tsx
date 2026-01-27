@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useDispatch } from 'react-redux'
-import { useAppSelector } from '../../store/hooks'
-import { signOut } from '@/store/auth.slice'
+import { useAppSelector } from '../../../store/hooks'
+import { logout } from '@/features/auth/auth.slice'
+// import { signOut } from '@/store/auth.slice'
 
-export const Route = createFileRoute('/admin/')({
+export const Route = createFileRoute('/_authenticated/admin/')({
   component: Admin,
 })
 
@@ -13,7 +14,7 @@ export default function Admin() {
   const user = useAppSelector((s) => s.auth.user)
 
   const onClickSignOutHandler = () => {
-    dispatch(signOut())
+    dispatch(logout())
     navigate({ to: '/' })
   }
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { getPosts } from '../../api/api'
-import type { Post } from '../../api/api'
+import { getPosts } from '../../../api/api'
+import type { Post } from '../../../api/api'
 
-export const Route = createFileRoute('/posts/')({
+export const Route = createFileRoute('/_authenticated/posts/')({
   component: Posts,
 })
 
