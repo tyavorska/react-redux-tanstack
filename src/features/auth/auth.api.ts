@@ -1,35 +1,3 @@
-// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-// import type { User } from '@/api/api'
-
-// export type LoginRequest = {
-//   username: string
-//   password: string
-// }
-
-// export type LoginResponse = {
-//   accessToken: string
-//   refreshToken: string
-//   user: User
-// }
-
-// export const authApi = createApi({
-//   reducerPath: 'authApi',
-//   baseQuery: fetchBaseQuery({
-//     baseUrl: 'https://dummyjson.com',
-//   }),
-//   endpoints: (builder) => ({
-//     login: builder.mutation<LoginResponse, LoginRequest>({
-//       query: (body) => ({
-//         url: '/auth/login',
-//         method: 'POST',
-//         body,
-//       }),
-//     }),
-//   }),
-// })
-
-// export const { useLoginMutation } = authApi
-// features/auth/auth.api.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logout, setAuth } from './auth.slice'
 import type { RootState } from '@/store'
