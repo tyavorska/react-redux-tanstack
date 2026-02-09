@@ -1,4 +1,4 @@
-import type { User } from '../api/api'
+import type { User } from '@/api/api'
 
 const STORAGE_KEY = 'auth'
 

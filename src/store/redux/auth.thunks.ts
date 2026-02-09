@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { login } from '../api/api'
-import type { User } from '../api/api'
+import { login } from '../../api/api'
+import type { User } from '../../api/api'
 
 type SignInArgs = {
   username: string

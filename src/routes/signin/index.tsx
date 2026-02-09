@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
-import { useAppDispatch } from '../../store/hooks'
 import { setAuth } from '@/features/auth/auth.slice'
 import { useLoginMutation } from '@/features/auth/auth.api'
+import { useAppDispatch } from '@/store/redux/hooks'
 
 export const Route = createFileRoute('/signin/')({
   component: SignIn,
@@ -23,7 +23,7 @@ export default function SignIn() {
 
     try {
       const result = await login({ username, password }).unwrap()
-      dispatch(setAuth({ accessToken: result.accessToken, user: result.user }))
+      dispatch(setAuth({ user: result }))
 
       const redirectTo = search.redirect || '/'
       navigate({ to: redirectTo, replace: true })

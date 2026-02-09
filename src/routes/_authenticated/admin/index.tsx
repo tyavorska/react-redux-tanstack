@@ -1,20 +1,20 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useDispatch } from 'react-redux'
-import { useAppSelector } from '../../../store/hooks'
-import { logout } from '@/features/auth/auth.slice'
+import { useAppSelector } from '@/store/redux/hooks'
+import { usePerformLogoutMutation } from '@/features/auth/auth.api'
 
 export const Route = createFileRoute('/_authenticated/admin/')({
   component: Admin,
 })
 
 export default function Admin() {
+  const [triggerLogout] = usePerformLogoutMutation()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const user = useAppSelector((s) => s.auth.user)
 
-  const onClickSignOutHandler = () => {
-    dispatch(logout())
-    navigate({ to: '/' })
+  const onClickSignOutHandler = async () => {
+    await triggerLogout()
+
+    navigate({ to: '/signin', replace: true })
   }
 
   return (
