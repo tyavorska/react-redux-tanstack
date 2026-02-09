@@ -2,11 +2,11 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { checkAuthStatus } from '@/features/auth/auth.selectores'
 
 import Layout from '@/components/Layout'
+import { checkAuthStatusZustand } from '@/features/auth/zustand/auth.util'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ location }) => {
-    // wait for the Redux store to try refreshing the session
-    const isAuthed = await checkAuthStatus()
+    const isAuthed = await checkAuthStatusZustand()
 
     if (!isAuthed) {
       throw redirect({

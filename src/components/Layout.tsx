@@ -1,8 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { useAppSelector } from '@/store/redux/hooks'
+import { useAuthStore } from '@/store/zustand/store'
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
-  const user = useAppSelector((s) => s.auth.user)
+  // const user = useAppSelector((s) => s.auth.user)
+  const user = useAuthStore((s) => s.user)
+
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100">
       <header className="border-b border-slate-800 p-4">
