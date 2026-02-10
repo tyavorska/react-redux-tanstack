@@ -4,10 +4,8 @@ import { useAuthStore } from '@/store/zustand/store'
 export const checkAuthStatusZustand = async () => {
   const { user, setUser } = useAuthStore.getState()
 
-  // 1. If already in store, return true
   if (user) return true
 
-  // 2. If empty (Refresh), try to fetch from /auth/me
   try {
     // This sends your cookies automatically
     const userData = await queryClient.fetchQuery({
@@ -17,7 +15,7 @@ export const checkAuthStatusZustand = async () => {
         if (!res.ok) throw new Error()
         return res.json()
       },
-      staleTime: 0, // Ensure we check fresh on refresh
+      staleTime: 0,
     })
 
     setUser(userData) // Refill Zustand

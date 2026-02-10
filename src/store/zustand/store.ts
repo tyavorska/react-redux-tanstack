@@ -5,6 +5,5 @@ export const useAuthStore = create((set, get) => ({
   user: null,
   setUser: (user: User) => set({ user }),
   logout: () => set({ user: null }),
-  // Selector for easy access in beforeLoad
   isAuthenticated: () => !!get().user,
 }))
