@@ -23,7 +23,6 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Whenever getMe (or login) succeeds, refill this slice
     builder.addMatcher(
       authApi.endpoints.getMe.matchFulfilled,
       (state, { payload }) => {
