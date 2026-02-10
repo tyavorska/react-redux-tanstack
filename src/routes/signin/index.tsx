@@ -96,13 +96,12 @@ export default function SignIn() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  // 1. Get the setter from Zustand
+  // the setter from Zustand
   const setAuth = useAuthStore((s) => s.setUser)
 
-  // 2. Define the TanStack Mutation
+  // the TanStack Mutation
   const loginMutation = useMutation({
     mutationFn: async (credentials: any) => {
-      // Ensure this URL matches your backend exactly
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,17 +122,15 @@ export default function SignIn() {
     if (!username || !password) return
 
     try {
-      // 3. Use mutateAsync to wait for the result in this try/catch block
+      // mutateAsync to wait for the result in this try/catch block
       const result = await loginMutation.mutateAsync({ username, password })
 
-      // 4. Save result to Zustand (Memory only)
+      // Saving result to Zustand
       setAuth(result)
 
-      // 5. Redirect user
       const redirectTo = search.redirect || '/'
       navigate({ to: redirectTo, replace: true })
     } catch (err) {
-      // Errors are caught here and also available via loginMutation.error
       console.error('Login failed:', err)
     }
   }
