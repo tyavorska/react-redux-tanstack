@@ -28,8 +28,6 @@ const authSlice = createSlice({
       authApi.endpoints.getMe.matchFulfilled,
       (state, { payload }) => {
         state.user = payload
-        // If your API returns a new short-lived accessToken here, save it:
-        // state.accessToken = payload.accessToken;
       },
     )
   },
